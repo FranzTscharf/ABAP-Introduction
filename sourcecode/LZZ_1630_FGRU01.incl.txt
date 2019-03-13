@@ -1,0 +1,37 @@
+FUNCTION Z_1630_F_CALC.
+*"----------------------------------------------------------------------
+*"*"Lokale Schnittstelle:
+*"  IMPORTING
+*"     VALUE(IM_OPERAND1) TYPE  I
+*"     VALUE(IM_OPERAND2) TYPE  I
+*"     VALUE(IM_OPERATOR) TYPE  C
+*"  EXPORTING
+*"     VALUE(EX_ERGEBNIS) TYPE  I
+*"  EXCEPTIONS
+*"      ZERO_DIVISION
+*"      INVALID_OPERATOR
+*"----------------------------------------------------------------------
+IF not ( im_operator = '+' or im_operator = '-' or im_operator = '*' or im_operator = '/' or im_operator = '%').
+  raise invalid_operator.
+endif.
+If ( im_operand2 = 0 )
+  and ( im_operator = '%' or im_operator = '/' ).
+  raise zero_division.
+endif.
+
+CASE IM_OPERATOR.
+  WHEN '+'.
+    EX_ERGEBNIS = IM_OPERAND1 + IM_OPERAND2.
+  WHEN '-'.
+    EX_ERGEBNIS = IM_OPERAND1 - IM_OPERAND2.
+  WHEN '*'.
+    EX_ERGEBNIS = IM_OPERAND1 * IM_OPERAND2.
+  When '/'.
+    EX_ERGEBNIS = IM_OPERAND1 / IM_OPERAND2.
+  WHEN '%'.
+    EX_ERGEBNIS = IM_OPERAND1 mod IM_OPERAND2.
+  WHEN OTHERS.
+    EX_ERGEBNIS = 0.
+ENDCASE.
+
+ENDFUNCTION.

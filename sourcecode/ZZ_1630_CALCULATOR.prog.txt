@@ -1,0 +1,54 @@
+*&---------------------------------------------------------------------*
+*& Report  ZZ_6130_CALCULATOR
+*&
+*&---------------------------------------------------------------------*
+*&
+*&
+*&---------------------------------------------------------------------*
+REPORT ZZ_1630_CALCULATOR.
+
+Parameter: operand1 type i,
+            operand2 type i,
+             operator type c length 1.
+Data ergebnis type i.
+CALL FUNCTION 'Z_1630_F_CALC'
+  EXPORTING
+    im_operand1       = operand1
+    im_operand2       = operand2
+    im_operator       = operator
+ IMPORTING
+    EX_ERGEBNIS       = ergebnis
+ EXCEPTIONS
+    zero_division = 1
+    invalid_operator = 2.
+
+case sy-subrc.
+  WHEN 1.
+    WRITE 'Nulldivision aufgetreten'.
+  WHEN 2.
+    WRITE 'invaild operator'.
+  WHEN 0.
+    Write ergebnis.
+ENDCASE.
+
+
+
+*CASE operator.
+* WHEN '+'.
+* ergebnis = operand1 + operand2.
+* WRITE: operand1, '+', operand2, '=', ergebnis.
+* WHEN '-'.
+* ergebnis = operand1 - operand2.
+* WRITE: operand1, '-', operand2, '=', ergebnis.
+* WHEN '*'.
+* ergebnis = operand1 * operand2.
+* WRITE: operand1, '*', operand2, '=', ergebnis.
+* When '/'.
+* ergebnis = operand1 / operand2.
+* WRITE: operand1, '/', operand2, '=', ergebnis.
+* WHEN '%'.
+* ergebnis = operand1 mod operand2.
+* WRITE: operand1, '%', operand2, '=', ergebnis.
+* WHEN OTHERS.
+* WRITE 'Sie haben etwas anderes eingegeben als eine mathematisches zeichen.'.
+* ENDCASE.

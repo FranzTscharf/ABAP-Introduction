@@ -1,0 +1,25 @@
+*----------------------------------------------------------------------*
+***INCLUDE ZZ_1630_PVERWALTUNG_USER_COI03.
+*----------------------------------------------------------------------*
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_0200  INPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE user_command_0200 INPUT.
+  case ok_code.
+    when 'BACK'.
+      LEAVE to SCREEN 100.
+    when 'DEL'.
+      DELETE FROM zz1630_angebot where angebotid = wa-angebotid.
+          if sy-subrc = 0.
+                MESSAGE 'Erfolgreich gelöscht' type 'S'.
+                CLEAR wa.
+                leave to screen 100.
+          else.
+                MESSAGE 'Error beim löschen' type 'E'.
+          ENDIF.
+    When 'ABBRECHEN'.
+      leave PROGRAM.
+  ENDCASE.
+ENDMODULE.

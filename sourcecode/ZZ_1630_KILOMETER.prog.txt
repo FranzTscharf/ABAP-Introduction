@@ -1,0 +1,34 @@
+*&---------------------------------------------------------------------*
+*& Report  ZZ_1630_KILOMETER
+*&
+*&---------------------------------------------------------------------*
+*&
+*&
+*&---------------------------------------------------------------------*
+REPORT zz_1630_kilometer.
+
+TYPES: BEGIN OF str_wagen_km,
+         wagennummer TYPE i,
+         km          TYPE i,
+END OF str_wagen_km.
+
+DATA kilometerstaende TYPE SORTED TABLE OF str_wagen_km WITH UNIQUE KEY wagennummer.
+DATA fahrt TYPE str_wagen_km.
+
+fahrt-wagennummer = 1.
+fahrt-km = 100.
+COLLECT fahrt INTO kilometerstaende.
+
+fahrt-wagennummer = 2.
+fahrt-km = 30.
+COLLECT fahrt INTO kilometerstaende.
+
+fahrt-wagennummer = 1.
+fahrt-km = 50.
+COLLECT fahrt INTO kilometerstaende.
+
+
+LOOP AT kilometerstaende INTO fahrt.
+  WRITE: fahrt-wagennummer, fahrt-km.
+  new-line.
+ENDLOOP.

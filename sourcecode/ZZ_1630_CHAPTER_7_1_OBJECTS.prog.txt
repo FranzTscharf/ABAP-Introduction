@@ -1,0 +1,27 @@
+*&---------------------------------------------------------------------*
+*& Report  ZZ_1630_CHAPTER_7_1_OBJECTS
+*&
+*&---------------------------------------------------------------------*
+*&
+*&
+*&---------------------------------------------------------------------*
+REPORT ZZ_1630_CHAPTER_7_1_OBJECTS.
+
+TYPES: BEGIN OF str_fahrzeug,
+  BEGIN OF name,
+    herstellername(20) TYPE c,
+    modellname(20)  TYPE c,
+  END OF name,
+  farbe(10) TYPE c,
+  motorleistung TYPE i,
+END OF str_fahrzeug.
+
+DATA meinfirmenwagen TYPE str_fahrzeug.
+meinfirmenwagen-herstellername = 'Volkswagen'.
+meinfirmenwagen-modellname = 'MB'.
+meinfirmenwagen-farbe = 'rot'.
+meinfirmenwagen-motorleistung = '200'.
+
+WRITE meinfirmenwagen-name-modellname.
+NEW-LINE.
+WRITE meinfirmenwagen-motorleistung.

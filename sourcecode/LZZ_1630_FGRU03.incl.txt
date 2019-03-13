@@ -1,0 +1,30 @@
+FUNCTION Z_1630_SANGEBOT.
+*"----------------------------------------------------------------------
+*"*"Lokale Schnittstelle:
+*"  IMPORTING
+*"     REFERENCE(CARRID1) TYPE  SPFLI-CARRID
+*"     REFERENCE(CONNID1) TYPE  SPFLI-CONNID
+*"     REFERENCE(CARRID2) TYPE  SPFLI-CARRID
+*"     REFERENCE(CONNID2) TYPE  SPFLI-CONNID
+*"  EXPORTING
+*"     REFERENCE(VERFUEGBAR) TYPE  INTEGER4
+*"----------------------------------------------------------------------
+DATA wa type SFLIGHT.
+DATA hinfluge type i.
+DATA rueckflug type i.
+hinfluge = 0.
+rueckflug = 0.
+Select * from SFLIGHT into wa where connid = connid1 and carrid = carrid1.
+  if 0 < ( wa-seatsmax + wa-seatsmax_b + wa-seatsmax_f - ( wa-seatsocc + wa-seatsocc_b + wa-seatsocc_f ) ).
+    hinfluge = 1.
+  endif.
+ENDSELECT.
+
+Select * from SFLIGHT into wa where connid = connid2 and carrid = carrid2.
+  if 0 < ( wa-seatsmax + wa-seatsmax_b + wa-seatsmax_f - ( wa-seatsocc + wa-seatsocc_b + wa-seatsocc_f ) ).
+    rueckflug = 1.
+  endif.
+ENDSELECT.
+
+verfuegbar = hinfluge * rueckflug. "export of verfugbarkeit 0*1=0; es ist nur verfügbar wenn 1=1*1 sonst nicht!
+ENDFUNCTION.

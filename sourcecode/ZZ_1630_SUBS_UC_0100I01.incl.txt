@@ -1,0 +1,19 @@
+*----------------------------------------------------------------------*
+***INCLUDE ZZ_1630_SUBS_UC_0100I01.
+*----------------------------------------------------------------------*
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_0100  INPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE user_command_0100 INPUT.
+  CASE ok_code.
+    WHEN 'FC1' OR 'FC2'.
+      my_tab_strip-activetab = ok_code.
+    WHEN 'ANZ'.
+      SELECT SINGLE * FROM scustom INTO wa WHERE id = scustom-id.
+    WHEN 'BACK'.
+      LEAVE PROGRAM.
+  ENDCASE.
+  CLEAR ok_code.
+ENDMODULE.

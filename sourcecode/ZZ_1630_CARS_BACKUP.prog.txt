@@ -1,0 +1,38 @@
+*&---------------------------------------------------------------------*
+*& Report  ZZ_1630_CARS
+*&
+*&---------------------------------------------------------------------*
+*&
+*&
+*&---------------------------------------------------------------------*
+REPORT ZZ_1630_CARS_BACKUP.
+
+TYPES: BEGIN of str_car,
+  BEGIN of name,
+    hersteller(20) TYPE c,
+    typbezeichnung(20) TYPE c,
+  END OF name,
+  leistung TYPE i,
+  jahr(4) type n,
+  fin(10) type n,
+  farbe(10) type c,
+  sitze type i,
+  maximalBeladung type i,
+END OF str_car.
+DATA mycar TYPE str_car.
+mycar-name-hersteller = 'Volkswagen'.
+mycar-name-typbezeichnung = 'v1'.
+mycar-leistung = '200'.
+mycar-jahr = '2004'.
+mycar-fin = '0003044'.
+mycar-farbe = 'blau'.
+mycar-sitze = 5.
+mycar-maximalbeladung = 2000. "2 Tonnen max. beladung()"
+WRITE: / 'Hersteller:',mycar-name-hersteller,   /
+'Typbezeichnung:', mycar-name-typbezeichnung,   /
+'Leistung:', mycar-leistung,                    /
+'Baujahr:', mycar-jahr,                         /
+'Fahrgestellidentifikationsnummer:', mycar-fin, /
+'Farbe:', mycar-farbe,                          /
+'Sitze:', mycar-sitze,                          /
+'Maximale Belastung:', mycar-maximalbeladung.

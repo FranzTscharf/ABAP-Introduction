@@ -1,0 +1,69 @@
+*&---------------------------------------------------------------------*
+*& Report  ZZ_1630_CARS
+*&
+*&---------------------------------------------------------------------*
+*&
+*&
+*&---------------------------------------------------------------------*
+REPORT ZZ_1630_CARS.
+
+TYPES: BEGIN of str_car,
+  BEGIN of name,
+    hersteller(20) TYPE c,
+    typbezeichnung(20) TYPE c,
+  END OF name,
+  leistung TYPE i,
+  jahr(4) type n,
+  fin(10) type n,
+  farbe(10) type c,
+  sitze type i,
+  maximalBeladung type i,
+END OF str_car.
+
+DATA fahrzeuge TYPE SORTED TABLE OF str_car WITH UNIQUE KEY fin.
+DATA mycar TYPE str_car.
+
+mycar-name-hersteller = 'Volkswagen'.
+mycar-name-typbezeichnung = 'v1'.
+mycar-leistung = '200'.
+mycar-jahr = '2004'.
+mycar-fin = '0003044'.
+mycar-farbe = 'blau'.
+mycar-sitze = 5.
+mycar-maximalbeladung = 2000. "2 Tonnen max. beladung()"
+INSERT mycar INTO TABLE fahrzeuge.
+
+mycar-name-hersteller = 'Mercedes Benz'.
+mycar-name-typbezeichnung = 'AMG'.
+mycar-leistung = '605'.
+mycar-jahr = '2014'.
+mycar-fin = '1008044'.
+mycar-farbe = 'schwarz'.
+mycar-sitze = 2.
+mycar-maximalbeladung = 1000. "2 Tonnen max. beladung()"
+INSERT mycar INTO TABLE fahrzeuge.
+
+mycar-name-hersteller = 'BMW'.
+mycar-name-typbezeichnung = '1'.
+mycar-leistung = '420'.
+mycar-jahr = '2017'.
+mycar-fin = '0203044'.
+mycar-farbe = 'grün'.
+mycar-sitze = 4.
+mycar-maximalbeladung = 1500. "2 Tonnen max. beladung()"
+INSERT mycar INTO TABLE fahrzeuge.
+
+DELETE TABLE fahrzeuge WITH TABLE KEY fin = '1008044'.
+
+
+LOOP AT fahrzeuge INTO mycar.
+  WRITE: / 'Hersteller:'(a01),mycar-name-hersteller,   /
+  'Typbezeichnung:'(a02), mycar-name-typbezeichnung,   /
+  'Leistung:'(a03), mycar-leistung,                    /
+  'Baujahr:'(a04), mycar-jahr,                         /
+  'Fahrgestellidentifikationsnummer:'(a05), mycar-fin, /
+  'Farbe:'(a06), mycar-farbe,                          /
+  'Sitze:'(a07), mycar-sitze,                          /
+  'Maximale Belastung:'(a08), mycar-maximalbeladung.
+  WRITE /.
+ENDLOOP.

@@ -1,0 +1,78 @@
+*----------------------------------------------------------------------*
+***INCLUDE ZZ_1630_FLEDIT_USER_COMMANDI02.
+*----------------------------------------------------------------------*
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_0200  INPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE user_command_0200 INPUT.
+case ok_code.
+    when 'BACK'.
+       CALL FUNCTION 'DEQUEUE_EZ_SPFLI'
+        EXPORTING
+          MODE_SPFLI       = 'S'
+          MANDT            = SY-MANDT
+          CARRID           = spfli-carrid
+          CONNID           = spfli-connid
+          X_CARRID         = ' '
+          X_CONNID         = ' '
+*          _SCOPE           = '3'
+*          _SYNCHRON        = ' '
+*          _COLLECT         = ' '
+                 .
+       LEAVE TO SCREEN 100.
+       ok_code = ''.
+    when 'LEAVE'.
+      leave PROGRAM.
+      ok_code = ''.
+    when 'SAVE'.
+      If spfli <> wa_conn.
+        CALL FUNCTION 'ENQUEUE_EZ_SPFLI'
+         EXPORTING
+           MODE_SPFLI           = 'E'
+           MANDT                = SY-MANDT
+           CARRID               = spfli-carrid
+           CONNID               = spfli-connid
+           X_CARRID             = ' '
+           X_CONNID             = ' '
+*           _SCOPE               = '2'
+*           _WAIT                = ' '
+*           _COLLECT             = ' '
+         EXCEPTIONS
+           FOREIGN_LOCK         = 1
+           SYSTEM_FAILURE       = 2
+           OTHERS               = 3
+        .
+        IF sy-subrc <> 0.
+          Message 'Fehler beim setzen der schreibsperre' type 'E'.
+        ENDIF.
+        MODIFY spfli from spfli.
+        CALL FUNCTION 'DEQUEUE_EZ_SPFLI'
+         EXPORTING
+          MODE_SPFLI       = 'E'
+          MANDT            = SY-MANDT
+          CARRID           = spfli-carrid
+          CONNID           = spfli-connid
+          X_CARRID         = ' '
+          X_CONNID         = ' '
+*          _SCOPE           = '3'
+*          _SYNCHRON        = ' '
+*          _COLLECT         = ' '
+        .
+      endif.
+      ok_code = ''.
+      CALL FUNCTION 'DEQUEUE_EZ_SPFLI'
+        EXPORTING
+          MODE_SPFLI       = 'S'
+          MANDT            = SY-MANDT
+          CARRID           = spfli-carrid
+          CONNID           = spfli-connid
+          X_CARRID         = ' '
+          X_CONNID         = ' '
+*          _SCOPE           = '3'
+*          _SYNCHRON        = ' '
+*          _COLLECT         = ' '
+      .
+ENDCASE.
+ENDMODULE.

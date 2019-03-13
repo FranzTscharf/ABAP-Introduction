@@ -1,0 +1,27 @@
+*&---------------------------------------------------------------------*
+*& Report  ZZ_1630_HELLOWORLD
+*&
+*&---------------------------------------------------------------------*
+*&
+*&
+*&---------------------------------------------------------------------*
+REPORT zz_1630_helloworld.
+
+WRITE 'helo world'.
+
+NEW-LINE.
+
+WRITE 'this is viktor and its first ABAP code'.
+
+WRITE sym_left_hand AS SYMBOL NO-ZERO.
+
+NEW-LINE.
+WRITE 'task for versioning'.
+DATA zeit1 TYPE t.
+zeit1 = '123456'.
+WRITE zeit1.
+WRITE (8) zeit1.
+
+NEW-LINE.
+WRITE sy-datum DDMMYY.
+WRITE sy-datum DD/MM/YYYY.

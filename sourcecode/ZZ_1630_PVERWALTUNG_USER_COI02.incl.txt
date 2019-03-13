@@ -1,0 +1,50 @@
+*----------------------------------------------------------------------*
+***INCLUDE ZZ_1630_PVERWALTUNG_USER_COI02.
+*----------------------------------------------------------------------*
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_0100  INPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE user_command_0100 INPUT.
+    Case ok_code.
+       when 'SHOW'.
+          MESSAGE zz1630_prosp-prospid type 'S'.
+          select single * from zz1630_prosp INTO wa WHERE prospid = zz1630_prosp-prospid.
+          if sy-subrc = 0.
+                MESSAGE 'Erfolgreich gelesen' type 'S'.
+                leave to screen 200.
+          else.
+                MESSAGE 'Error beim lesen' type 'E'.
+                leave to screen 100.
+          ENDIF.
+       when 'EDIT'.
+          MESSAGE 'EDIT' type 'S'.
+          select single * from zz1630_prosp INTO wa WHERE prospid = zz1630_prosp-prospid.
+          if sy-subrc = 0.
+                MESSAGE 'Zu bearbeitenden datensatz erfolgreich gelesen' type 'S'.
+                leave to screen 300.
+          else.
+                MESSAGE 'Error beim lesen' type 'E'.
+                leave to screen 100.
+          ENDIF.
+       when 'ADD'.
+          MESSAGE 'ADD' type 'S'.
+          select single * from zz1630_prosp INTO wa WHERE prospid = zz1630_prosp-prospid.
+          if sy-subrc = 0.
+                MESSAGE 'Der Datensatz mit der angegebenen ID existiert bereits' type 'E'.
+                leave to screen 100.
+          else.
+                clear wa.
+                wa-prospid = zz1630_prosp-prospid.
+                MESSAGE 'Für die ID kann ein datensatz angelegt werden' type 'S'.
+                leave to screen 400.
+          ENDIF.
+       when 'BACK'.
+          MESSAGE 'BACK' type 'S'.
+          leave to screen 100. " do nothing
+       when 'ABBRECHEN'.
+          MESSAGE 'ABBRECHEN' type 'S'.
+          leave PROGRAM.
+    ENDCASE.
+ENDMODULE.

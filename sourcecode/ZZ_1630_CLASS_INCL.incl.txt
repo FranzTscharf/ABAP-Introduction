@@ -1,0 +1,71 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZZ_1630_CLASS_INCL
+*&---------------------------------------------------------------------*
+*&---------------------------------------------------------------------*
+*&       Class (Implementation)  FAHRZEUG
+*&---------------------------------------------------------------------*
+*        Text
+*----------------------------------------------------------------------*
+
+* ÜBERKLASSE VERERBUNG
+* -fahrzeug
+*    -wasserfahrzeug
+*    -landfahrzeug
+CLASS fahrzeug DEFINITION ABSTRACT.
+  PUBLIC SECTION.
+    METHODS: attributsetzen IMPORTING im_name type c
+                                      im_sitzplaetze type i
+                                      im_hoechstgeschwindigkeit type i.
+    Methods: ausgeben.
+  PRIVATE SECTION.
+    DATA:
+      name                   TYPE c LENGTH 20,
+      sitzplaetze            TYPE i,
+      hoechstgeschwindigkeit TYPE i.
+ENDCLASS.
+CLASS fahrzeug IMPLEMENTATION.
+  METHOD attributsetzen.
+    name = im_name.
+    sitzplaetze = im_sitzplaetze.
+    hoechstgeschwindigkeit = im_hoechstgeschwindigkeit.
+  ENDMETHOD.
+  METHOD ausgeben.
+    WRITE: / 'NAME:',30 name,
+           / 'Sitzplätze',30 sitzplaetze,
+           / 'Höchstgeschwindigkeit', 30 hoechstgeschwindigkeit.
+  ENDMETHOD.
+ENDCLASS.               "FAHRZEUG
+
+* DEFENITIONS
+class wasserfahrzeuge DEFINITION INHERITING FROM fahrzeug.
+  PUBLIC SECTION.
+    METHODS:set_tiefgang importing im_tiefgang type i, ausgeben REDEFINITION.
+  PRIVATE SECTION.
+    Data tiefgang type i.
+ENDCLASS.
+class landfahrzeuge DEFINITION INHERITING FROM fahrzeug.
+  PUBLIC SECTION.
+    METHODS:set_reader importing im_reader type i, ausgeben REDEFINITION.
+  PRIVATE SECTION.
+    Data reader type i.
+ENDCLASS.
+
+* IMPLEMENTATIONS
+class wasserfahrzeuge IMPLEMENTATION.
+  METHOD set_tiefgang.
+    tiefgang = im_tiefgang.
+  ENDMETHOD.
+  METHOD ausgeben.
+    super->ausgeben( ).
+    WRITE: / 'Tiefgang', 30 tiefgang.
+  ENDMETHOD.
+ENDCLASS.
+class landfahrzeuge IMPLEMENTATION.
+  METHOD set_reader.
+    reader = im_reader.
+  ENDMETHOD.
+  METHOD ausgeben.
+    super->ausgeben( ).
+    WRITE: / 'Anzahl Räder', 30 reader.
+  ENDMETHOD.
+ENDCLASS.

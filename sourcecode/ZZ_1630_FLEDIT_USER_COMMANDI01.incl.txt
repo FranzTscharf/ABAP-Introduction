@@ -1,0 +1,48 @@
+*----------------------------------------------------------------------*
+*INCLUDE ZZ_1630_FLEDIT_USER_COMMANDI01.
+*----------------------------------------------------------------------*
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_0100  INPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+
+MODULE user_command_0100 INPUT.
+  case ok_code.
+    when 'SELECT'.
+      CALL FUNCTION 'ENQUEUE_EZ_SPFLI'
+       EXPORTING
+         MODE_SPFLI           = 'S'
+         MANDT                = SY-MANDT
+         CARRID               = spfli-carrid
+         CONNID               = spfli-connid
+         X_CARRID             = ' '
+         X_CONNID             = ' '
+       EXCEPTIONS
+         FOREIGN_LOCK         = 1
+         SYSTEM_FAILURE       = 2
+         OTHERS               = 3
+                .
+      IF sy-subrc <> 0.
+         MESSAGE s002. "fehler bei sperren aufgetreten
+      ENDIF.
+
+      select single * from SPFLI
+       INTO wa_conn
+       WHERE carrid = spfli-carrid
+       AND connid = spfli-connid.
+      if sy-subrc = 0.
+        MESSAGE s000 WITH wa_conn-carrid wa_conn-connid.
+      else.
+        MESSAGE e001 WITH spfli-carrid spfli-connid.
+        leave to screen 100.
+      ENDIF.
+      ok_code = ''.
+    when 'BACK'.
+      ok_code = ''.
+      leave PROGRAM.
+    when 'LEAVE'.
+      ok_code = ''.
+      leave PROGRAM.
+ ENDCASE.
+ENDMODULE.

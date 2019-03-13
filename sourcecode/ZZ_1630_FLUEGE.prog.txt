@@ -1,0 +1,132 @@
+*&---------------------------------------------------------------------*
+*& Report  ZZ_1630_FLUEGE
+*&
+*&---------------------------------------------------------------------*
+*&
+*&
+*&---------------------------------------------------------------------*
+REPORT zz_1630_fluege
+MESSAGE-ID zz_1630_messages.
+
+DATA:
+  wa         TYPE spfli,
+  itab       TYPE TABLE OF spfli,
+  wa_sflight TYPE sflight,
+  lt_sflight TYPE TABLE OF sflight.
+DATA FLAG.
+TABLES sscrfields.
+SELECTION-SCREEN BEGIN OF SCREEN 1001.
+  SELECTION-SCREEN COMMENT 1(83) text-007.
+  SELECTION-SCREEN ULINE.
+  SELECTION-SCREEN begin of block block3.
+      SELECTION-SCREEN BEGIN OF LINE.
+        SELECTION-SCREEN COMMENT (32) text-005 FOR FIELD pa_carr.
+        PARAMETER pa_carr TYPE spfli-carrid MODIF ID sc1.
+        SELECTION-SCREEN COMMENT (60) text-006.
+      SELECTION-SCREEN END OF LINE.
+      SELECTION-SCREEN PUSHBUTTON 2(15) text-004 USER-COMMAND clear.
+  SELECTION-SCREEN end of block block3.
+SELECTION-SCREEN END OF SCREEN 1001.
+
+AT SELECTION-SCREEN.
+CASE SSCRFIELDS.
+
+WHEN 'CLEAR'.
+  MESSAGE 'Cleared the input box' TYPE 'I'.
+  pa_carr = ''.
+  "LOOP AT SCREEN INTO DATA(screen_wa).
+  "  IF screen_wa-group1 = 'SC1'.
+  "    screen_wa-input = 'test'.
+  "    MODIFY SCREEN from screen_wa.
+  "  ENDIF.
+  "ENDLOOP.
+ENDCASE..
+INITIALIZATION.
+CALL SELECTION-SCREEN 1001.
+"SELECTION-SCREEN begin of block block1 with frame title text-007.
+"   PARAMETER pa_carr TYPE spfli-carrid.
+"   SELECTION-SCREEN COMMENT 1(70) text-006.
+"SELECTION-SCREEN end of block block1.
+
+
+"Select * from spfli into wa.
+"WRITE: /
+"wa-carrid,wa-connid,wa-countryfr, wa-cityfrom, wa-countryto, wa-cityto.
+"ENDSELECT."
+
+"Select * from spfli into TABLE itab where carrid = pa_carr.
+
+
+CALL FUNCTION 'Z_1630_GET_FLUEG'
+  EXPORTING
+    im_carrid = pa_carr
+  IMPORTING
+    ex_liste  = itab
+  EXCEPTIONS
+    no_auth   = 7
+    sql_error = 5.
+.
+MESSAGE s000 WITH pa_carr.
+
+START-OF-SELECTION.
+
+
+  IF sy-subrc = 0.
+    MESSAGE s000 WITH pa_carr.
+    FORMAT COLOR 4.
+    ULINE /(69).
+    WRITE: / '|Verbindung',15 '|Von',41 '|Nach',69 '|'.
+    FORMAT RESET.
+    ULINE /(69).
+    LOOP AT itab INTO wa.
+      WRITE: / '|',wa-carrid,wa-connid,15 '|',wa-countryfr, wa-cityfrom,41 '|',wa-countryto, wa-cityto,69 '|'.
+      HIDE wa.
+      ULINE /(69).
+    ENDLOOP.
+  ELSEIF sy-subrc = 5.
+    MESSAGE e002.
+    WRITE 'Ein fehler ist aufgetreten.'.
+  ELSEIF sy-subrc = 7.
+    MESSAGE e002.
+    WRITE 'Der Benutzer hat keine berechtigungen um diese aktion auszuführen.'.
+  ELSE.
+    MESSAGE e002.
+  ENDIF.
+
+
+AT LINE-SELECTION.
+
+  IF sy-lsind = 1 AND  sy-lilli > 5.
+    MESSAGE s003 WITH wa-connid.
+    FORMAT COLOR COL_NEGATIVE.
+    WRITE: / 'Einzelflüge zur Verbindung',wa-carrid,wa-connid.
+
+    ULINE:/(69).
+    FORMAT COLOR COL_HEADING.
+    WRITE:/ '|Datum' COLOR 1,
+          24 '|Flugzeugtyp' COLOR 1,
+          38 '|Plätze' COLOR 1,
+          53 '|Belegt' COLOR 1,
+          69 '|'.
+    FORMAT RESET.
+    ULINE:/(69).
+
+    SELECT * FROM sflight INTO wa_sflight
+    WHERE carrid = wa-carrid AND connid = wa-connid.
+      "WRITE: / '|',wa_sflight-fldate,(15)'|', wa_sflight-planetype, wa_sflight-seatsmax, wa_sflight-seatsocc.
+      WRITE:/ '|', wa_sflight-fldate,
+           24 '|', wa_sflight-planetype,
+           38 '|', wa_sflight-seatsmax,
+           53 '|', wa_sflight-seatsocc,
+           69 '|'.
+      APPEND wa_sflight TO lt_sflight.
+      ULINE:/(69).
+    ENDSELECT.
+    "SeLECT * From sflight into table lt_sflight where carrid = wa-carrid AND connid = wa-connid.
+    "loop at lt_sflight into wa_sflight.
+    "WRITE: / wa_sflight-fldate, wa_sflight-planetype, wa_sflight-seatsmax, wa_sflight-seatsocc.
+    "endloop.
+
+  ELSE.
+    WRITE 'EROR'.
+  ENDIF.

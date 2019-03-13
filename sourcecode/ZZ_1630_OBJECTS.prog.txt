@@ -1,0 +1,62 @@
+*&---------------------------------------------------------------------*
+*& Report  ZZ_1630_OBJECTS
+*&
+*&---------------------------------------------------------------------*
+*&
+*&
+*&---------------------------------------------------------------------*
+REPORT zz_1630_objects.
+*&---------------------------------------------------------------------*
+*&       Class FAHRZEUG
+*&---------------------------------------------------------------------*
+*        diese Klasse beinhaltet die repräsentation eines fahrzeugs mit semtlichen konfigurationen.
+*----------------------------------------------------------------------*
+INCLUDE zz_1630_class_incl.
+DATA meinfahrzeug TYPE REF TO fahrzeug.
+START-OF-SELECTION.
+
+  "meinfahrzeug->sitzplaetze = 5.
+  "meinfahrzeug->hoechstgeschwindigkeit = 190.
+
+  "WRITE meinfahrzeug->name.
+  "WRITE meinfahrzeug->sitzplaetze.
+  "WRITE meinfahrzeug->hoechstgeschwindigkeit.
+
+Data: meinwasserfahrzeug type ref to wasserfahrzeuge,
+      meinlandfahrzeug type ref to landfahrzeuge.
+DATA fahrzeug_tbl type table of ref to fahrzeug.
+
+CREATE OBJECT meinwasserfahrzeug.
+meinwasserfahrzeug->attributsetzen( exporting im_name = 'Luftkissen' im_sitzplaetze = 15 im_hoechstgeschwindigkeit = 50 ).
+meinwasserfahrzeug->set_tiefgang( im_tiefgang = 30 ).
+APPEND meinwasserfahrzeug to fahrzeug_tbl.
+
+CREATE OBJECT meinwasserfahrzeug.
+meinwasserfahrzeug->attributsetzen( exporting im_name = 'Motorbod' im_sitzplaetze = 6 im_hoechstgeschwindigkeit = 80 ).
+meinwasserfahrzeug->set_tiefgang( im_tiefgang = 20 ).
+APPEND meinwasserfahrzeug to fahrzeug_tbl.
+
+CREATE OBJECT meinlandfahrzeug.
+meinlandfahrzeug->attributsetzen( exporting im_name = 'Traband' im_sitzplaetze = 5 im_hoechstgeschwindigkeit = 120 ).
+meinlandfahrzeug->set_reader( im_reader = 2 ).
+APPEND meinlandfahrzeug to fahrzeug_tbl.
+
+CREATE OBJECT meinlandfahrzeug.
+meinlandfahrzeug->attributsetzen( exporting im_name = 'VW Golf' im_sitzplaetze = 4 im_hoechstgeschwindigkeit = 160 ).
+meinlandfahrzeug->set_reader( im_reader = 2 ).
+APPEND meinlandfahrzeug to fahrzeug_tbl.
+
+
+* Ausgabe der fahrzeuge
+Loop at fahrzeug_tbl into meinfahrzeug.
+  meinfahrzeug->ausgeben( ).
+  WRITE:/.
+ENDLOOP.
+
+
+CREATE OBJECT meinfahrzeug TYPE wasserfahrzeuge.
+meinfahrzeug->attributsetzen( exporting im_name = 'Sunnseeker' im_sitzplaetze = 5 im_hoechstgeschwindigkeit = 230 ).
+meinwasserfahrzeug ?= meinfahrzeug.
+meinwasserfahrzeug->set_tiefgang( 1 ).
+meinfahrzeug->ausgeben( ).
+write:/.

@@ -1,0 +1,60 @@
+*&---------------------------------------------------------------------*
+*& Report  ZZ_1630_CHAPTER_7_1
+*&
+*&---------------------------------------------------------------------*
+*&
+*&
+*&---------------------------------------------------------------------*
+REPORT ZZ_1630_CHAPTER_7_1.
+
+* Time
+DATA zeit1 TYPE t.
+zeit1 = '123456'.
+WRITE zeit1.
+WRITE (6) zeit1.
+
+* Formatierung Datumsangaben
+New-line.
+WRITE sy-datum DDMMYY.
+WRITE sy-datum DD/MM/YYYY.
+
+* integer
+NEW-LINE.
+DATA integer1 TYPE i.
+integer1 = 124.
+WRITE integer1.
+
+* gleitkommazahlen
+NEW-LINE.
+DATA gleit TYPE f.
+gleit = '1.2'.
+gleit = gleit + '2'.
+WRITE gleit.
+
+* gepackte zahlen
+NEW-LINE.
+DATA gepackt TYPE p DECIMALS 3.
+gepackt = '1.456'.
+gepackt = gepackt + '0.020'.
+write gepackt.
+
+* Feld Definitionen
+NEW-LINE.
+DATA zahl1 TYPE i.
+DATA zahl2 TYPE f VALUE '0.2'.
+DATA zahl3 LIKE zahl2.
+DATA kundenname(20) TYPE c.
+
+*Eigene Datentypen
+NEW-LINE.
+Types plz(5) TYPE n.
+DATA meine_plz TYPE plz.
+meine_plz = '10119'.
+write meine_plz.
+
+* Kettensatzes
+new-line.
+DATA a TYPE p.
+DATA c TYPE d.
+* or: DATA: a TYPE p, c TYPE d.
+WRITE 'ABC': INVERSE, HOTSPOT.

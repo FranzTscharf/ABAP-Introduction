@@ -1,0 +1,29 @@
+*&---------------------------------------------------------------------*
+*& Report  ZZ_1630_NKTEST
+*&
+*&---------------------------------------------------------------------*
+*&
+*&
+*&---------------------------------------------------------------------*
+REPORT zz_1630_nktest.
+
+DATA var_num TYPE i.
+
+
+CALL FUNCTION 'NUMBER_GET_NEXT'
+  EXPORTING
+    nr_range_nr = '1'
+    object      = 'ZZ_1630_NK'
+*   QUANTITY    = '1'
+*   SUBOBJECT   = ' '
+*   TOYEAR      = '0000'
+*   IGNORE_BUFFER                 = ' '
+ IMPORTING
+   NUMBER      = var_num.
+IF sy-subrc <> 0.
+* Implement suitable error handling here
+  WRITE 'error'.
+Else.
+  WRITE 'Auto increment: '.
+  WRITE var_num.
+ENDIF.

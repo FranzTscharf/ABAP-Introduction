@@ -1,0 +1,27 @@
+*----------------------------------------------------------------------*
+***INCLUDE ZZ_1630_PVERWALTUNG_USER_COI05.
+*----------------------------------------------------------------------*
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_0400  INPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE user_command_0400 INPUT.
+  case ok_code.
+    when 'SAVE'.
+      insert zz1630_prosp from wa.
+      if sy-subrc = 0.
+                MESSAGE 'Erfolgreich hinzugefuergt' type 'S'.
+                CLEAR wa.
+                leave to screen 100.
+      else.
+                MESSAGE 'Error beim hinzufugen' type 'E'.
+      ENDIF.
+    when 'BACK'.
+      CLEAR wa.
+      LEAVE to SCREEN 100.
+    When 'ABBRECHEN'.
+      CLEAR wa.
+      leave PROGRAM.
+  ENDCASE.
+ENDMODULE.

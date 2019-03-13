@@ -1,0 +1,124 @@
+*&---------------------------------------------------------------------*
+*& Report  ZZ_1630_SUCHE
+*&
+*&---------------------------------------------------------------------*
+*&
+*&
+*&---------------------------------------------------------------------*
+REPORT ZZ_1630_SUCHE.
+DATA wa TYPE zz_1630_sview.
+DATA clearcontent type n.
+DATA seats_free TYPE string.
+DATA seats_all type string.
+Data tbl_lines type i.
+DATA itab type table of zz_1630_sview.
+TABLES sscrfields.
+SELECTION-SCREEN BEGIN OF SCREEN 500.
+       SELECTION-SCREEN COMMENT 1(83) text-007.
+       SELECTION-SCREEN ULINE.
+       SELECT-OPTIONS datum FOR wa-fldate MODIF ID SC1.
+       SELECTION-SCREEN begin of block block1.
+        SELECTION-SCREEN SKIP 2.
+        SELECTION-SCREEN BEGIN OF LINE.
+          SELECTION-SCREEN COMMENT (83) text-008.
+        SELECTION-SCREEN END OF LINE.
+        SELECT-OPTIONS co_fr FOR wa-countryfr NO INTERVALS NO-EXTENSION MODIF ID SC1.
+        SELECT-OPTIONS ci_fr FOR wa-cityfrom NO INTERVALS NO-EXTENSION MODIF ID SC1.
+       SELECTION-SCREEN end of block block1.
+       SELECTION-SCREEN begin of block block2.
+        SELECTION-SCREEN SKIP 2.
+        SELECTION-SCREEN BEGIN OF LINE.
+          SELECTION-SCREEN COMMENT (83) text-009.
+        SELECTION-SCREEN END OF LINE.
+        SELECT-OPTIONS co_to FOR wa-countryto NO INTERVALS NO-EXTENSION MODIF ID SC1.
+        SELECT-OPTIONS ci_to FOR wa-cityto NO INTERVALS NO-EXTENSION MODIF ID SC1.
+       SELECTION-SCREEN end of block block2.
+       SELECTION-SCREEN begin of block block3.
+        SELECTION-SCREEN SKIP 1.
+        PARAMETERS klasse type sbook-class MODIF ID SC1. "use prediction of tbl sbook field class
+        SELECT-OPTIONS price FOR wa-price MODIF ID SC1.
+       SELECTION-SCREEN end of block block3.
+       SELECTION-SCREEN begin of block block4.
+        SELECTION-SCREEN SKIP 3.
+        SELECTION-SCREEN PUSHBUTTON 2(15) text-010 USER-COMMAND clear.
+       SELECTION-SCREEN end of block block4.
+       "SELECT-OPTIONS co_fr FOR wa-countryfr NO INTERVALS NO-EXTENSION.
+       "SELECTION-SCREEN PUSHBUTTON 5(10) taste USER-COMMAND wechsel.
+SELECTION-SCREEN END OF SCREEN 500.
+AT SELECTION-SCREEN.
+  CASE SSCRFIELDS.
+    WHEN 'CLEAR'.
+      REFRESH: datum, ci_fr,ci_to,co_fr,co_to,price.
+      clear klasse.
+  ENDCASE.
+ .
+INITIALIZATION.
+  "Write: / 'Zeitraum:', datum-low,datum-high.
+  "Write klasse.
+
+START-OF-SELECTION.
+  Call SCREEN 500 STARTING AT 1 1.
+  SELECT * FROM zz_1631_sview INTO CORRESPONDING FIELDS OF TABLE @itab
+    WHERE fldate IN @datum
+    AND countryfr IN @co_fr
+    AND cityfrom IN @ci_fr
+    AND countryto IN @co_to
+    AND cityto IN @ci_to
+    AND price IN @price
+    AND currency = 'EUR'.
+* check for error
+  IF sy-subrc = 0.
+    DESCRIBE TABLE itab lines tbl_lines. "get all rows of tbl
+    FORMAT COLOR 4.
+    WRITE 'Es gibt:'.
+    WRITE tbl_lines.
+    WRITE 'Suchtreffer. Diese Flüge wurden gefunden:'.
+    ULINE /(100).
+    WRITE: /'|Von', 20 '|Nach', 35 '|Datum', 50 '|freie Pl.', 65 '|Klasse', 75 '| Ges.Pl.', 85 '|Gesellschaft', 100 '|'.
+    FORMAT RESET.
+    CASE klasse.
+      WHEN 'C'.
+        SORT itab BY seatsocc_b ASCENDING seatsmax_b DESCENDING.
+        LOOP AT itab INTO wa.
+          seats_all = wa-seatsmax_b.
+          seats_free = wa-seatsmax_b - wa-seatsocc_b.
+          ULINE /(100).
+          WRITE: /'|', wa-cityfrom, 20 '|', wa-cityto, 35 '|', wa-fldate, 50 '|', seats_free, 65 '|Business class', 75 '|', seats_all, 85 '|', wa-carrname, 100 '|'.
+        ENDLOOP.
+        ULINE /(69).
+      WHEN 'Y'.
+        SORT itab BY seatsocc ASCENDING seatsmax DESCENDING.
+        LOOP AT itab INTO wa.
+          seats_all = wa-seatsmax.
+          seats_free = wa-seatsmax - wa-seatsocc.
+          ULINE /(100).
+          WRITE: /'|', wa-airpfrom, 20 '|',
+                       wa-cityto, 35 '|',
+                       wa-fldate, 50 '|',
+                       seats_free, 50 '|Economy class',65 '|',
+                       seats_all, 75 '|',
+                       wa-carrname, 99 '|'.
+        ENDLOOP.
+        ULINE /(69).
+      WHEN ' '.
+        SORT itab BY seatsocc ASCENDING seatsmax DESCENDING.
+        LOOP AT itab INTO wa.
+          seats_free = wa-seatsmax + wa-seatsmax_b + wa-seatsmax_f - ( wa-seatsocc + wa-seatsocc_b + wa-seatsocc_f ).
+          seats_all = wa-seatsmax + wa-seatsmax_b + wa-seatsmax_f.
+          ULINE /(100).
+          WRITE: /'|', wa-cityfrom, 20 '|', wa-cityto, 35 '|', wa-fldate, 50 '|', seats_free, 65 '|Any class', 75 '|', seats_all, 85 '|', wa-carrname, 100 '|'.
+        ENDLOOP.
+        ULINE /(69).
+      WHEN 'F'.
+        SORT itab BY seatsocc_f ASCENDING seatsmax_f DESCENDING.
+        LOOP AT itab INTO wa.
+          seats_all = wa-seatsmax_f.
+          seats_free = wa-seatsmax_f - wa-seatsocc_f.
+          ULINE /(100).
+          WRITE: /'|', wa-cityfrom, 20 '|', wa-cityto, 35 '|', wa-fldate, 50 '|', seats_free, 65 '|First class', 75 '|', seats_all, 85 '|', wa-carrname, 100 '|'.
+        ENDLOOP.
+        ULINE /(69).
+    ENDCASE.
+  ELSE.
+    Message 'Error something went wrong' type 'E'.
+  ENDIF.

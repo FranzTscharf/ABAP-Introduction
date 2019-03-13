@@ -1,0 +1,6 @@
+* regenerated at 04.02.2019 16:11:51
+FUNCTION-POOL ZZ_1630_FGPFLEGE           MESSAGE-ID SV.
+
+* INCLUDE LZZ_1630_FGPFLEGED...              " Local class definition
+  INCLUDE LSVIMDAT                                . "general data decl.
+  INCLUDE LZZ_1630_FGPFLEGET00                    . "view rel. data dcl.

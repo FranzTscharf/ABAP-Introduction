@@ -1,0 +1,15 @@
+*******************************************************************
+*   System-defined Include-files.                                 *
+*******************************************************************
+  INCLUDE LZZ_1630_FGRTOP.                   " Global Data
+  INCLUDE LZZ_1630_FGRUXX.                   " Function Modules
+
+*******************************************************************
+*   User-defined Include-files (if necessary).                    *
+*******************************************************************
+* INCLUDE LZZ_1630_FGRF...                   " Subroutines
+* INCLUDE LZZ_1630_FGRO...                   " PBO-Modules
+* INCLUDE LZZ_1630_FGRI...                   " PAI-Modules
+* INCLUDE LZZ_1630_FGRE...                   " Events
+* INCLUDE LZZ_1630_FGRP...                   " Local class implement.
+* INCLUDE LZZ_1630_FGRT99.                   " ABAP Unit tests

@@ -1,0 +1,30 @@
+*&---------------------------------------------------------------------*
+*& Report  ZZ_1630_STATISTIK
+*&
+*&---------------------------------------------------------------------*
+*&
+*&
+*&---------------------------------------------------------------------*
+REPORT ZZ_1630_STATISTIK.
+
+TYPES: BEGIN OF stat_type,
+         carrid          Like SPFLI-carrid,
+         carrname       like SCARR-carrname,
+         dauer          like SPFLI-fltime,
+END OF stat_type.
+
+Data ltab_entry type TABLE OF stat_type.
+
+select SPFLI~carrid,SCARR~carrname, max( fltime ) as dauer from SPFLI inner join SCARR on SPFLI~carrid = SCARR~carrid
+into CORRESPONDING FIELDS OF TABLE @ltab_entry
+where SPFLI~fltype = ' '
+group by SPFLI~carrid, carrname
+having max( SPFLI~fltime ) > 420
+order by dauer DESCENDING.
+
+
+FIELD-SYMBOLS: <fs_entry> type stat_type.
+
+loop at ltab_entry ASSIGNING <fs_entry>.
+  write:/ <fs_entry>-carrid, <fs_entry>-carrname,<fs_entry>-dauer.
+ENDLOOP.

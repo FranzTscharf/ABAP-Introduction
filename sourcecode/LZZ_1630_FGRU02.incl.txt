@@ -1,0 +1,28 @@
+FUNCTION Z_1630_GET_FLUEG .
+*"----------------------------------------------------------------------
+*"*"Lokale Schnittstelle:
+*"  IMPORTING
+*"     REFERENCE(IM_CARRID) TYPE  S_CARR_ID
+*"  EXPORTING
+*"     REFERENCE(EX_LISTE) TYPE  ZZ_1630_FLISTE
+*"  EXCEPTIONS
+*"      SQL_ERROR
+*"      NO_AUTH
+*"----------------------------------------------------------------------
+
+
+Select * from spfli into TABLE ex_liste where carrid = im_carrid.
+
+AUTHORITY-CHECK OBJECT 'S_CARRID'
+         ID 'CARRID' FIELD im_carrid
+         ID 'ACTVT' FIELD '03'.
+
+IF sy-subrc <> 0.
+    raise no_auth.
+ENDIF.
+
+if not sy-subrc = 0.
+    raise sql_error.
+ endif.
+
+ENDFUNCTION.

@@ -1,0 +1,35 @@
+*&---------------------------------------------------------------------*
+*& Report  ZZ_1630_PVERWALTUNG
+*&
+*&---------------------------------------------------------------------*
+*&
+*&
+*&---------------------------------------------------------------------*
+PROGRAM ZZ_1630_AVERWALTUNG.
+
+INCLUDE ZZ_1630_AVERWALTUNG_TOP.
+*INCLUDE zz_1630_pverwaltung_TOP.
+
+INCLUDE ZZ_1630_AVERWALTUNG_STATUS_O01.
+*INCLUDE zz_1630_pverwaltung_status_o01.
+
+INCLUDE ZZ_1630_AVERWALTUNG_USER_COI02.
+*INCLUDE zz_1630_pverwaltung_user_coi02.
+
+INCLUDE ZZ_1630_AVERWALTUNG_STATUS_O02.
+*INCLUDE zz_1630_pverwaltung_status_o02.
+
+INCLUDE ZZ_1630_AVERWALTUNG_USER_COI03.
+*INCLUDE zz_1630_pverwaltung_user_coi03.
+
+INCLUDE ZZ_1630_AVERWALTUNG_STATUS_O03.
+*INCLUDE zz_1630_pverwaltung_status_o03.
+
+INCLUDE ZZ_1630_AVERWALTUNG_USER_COI04.
+*INCLUDE zz_1630_pverwaltung_user_coi04.
+
+INCLUDE ZZ_1630_AVERWALTUNG_STATUS_O04.
+*INCLUDE zz_1630_pverwaltung_status_o04.
+
+INCLUDE ZZ_1630_AVERWALTUNG_USER_COI05.
+*INCLUDE zz_1630_pverwaltung_user_coi05.

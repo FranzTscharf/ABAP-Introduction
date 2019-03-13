@@ -1,0 +1,46 @@
+*&---------------------------------------------------------------------*
+*& Report  ZZ_1630_STUDENTEN_GLOBAL
+*&
+*&---------------------------------------------------------------------*
+*&
+*&
+*&---------------------------------------------------------------------*
+REPORT zz_1630_studenten_global.
+
+DATA students TYPE zz_1630_stud_tab.
+DATA student TYPE zz1630_stud.
+PARAMETERS pa_fach TYPE zz_1630_st_studiengang.
+
+student-vorname = 'Max'.
+student-name = 'Mustermann'.
+student-semester = 1.
+student-studiengang = pa_fach.
+student-abschluss = 'Bachlore of science'.
+student-matrikel = '1630403330'.
+INSERT student INTO TABLE students.
+
+student-vorname = 'Anna'.
+student-name = 'Hagen'.
+student-semester = 4.
+student-studiengang = pa_fach.
+student-abschluss = 'Bachlore of science'.
+student-matrikel = '1630403450'.
+INSERT student INTO TABLE students.
+
+student-vorname = 'Laura'.
+student-name = 'Sagen'.
+student-semester = 6.
+student-studiengang = pa_fach.
+student-abschluss = 'Bachlore of science'.
+student-matrikel = '1630443330'.
+INSERT student INTO TABLE students.
+
+LOOP AT students INTO student.
+  WRITE: / 'Vorname:'(a01),student-vorname,     /
+  'Nachname:'(a02), student-name,               /
+  'Semester:'(a03), student-semester,           /
+  'Studiengang:'(a04), student-studiengang,     /
+  'Abschlussziel:'(a05), student-abschluss,     /
+  'Matrikelnummer:'(a06), student-matrikel.
+  WRITE /.
+ENDLOOP.

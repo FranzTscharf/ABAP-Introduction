@@ -1,0 +1,21 @@
+*&---------------------------------------------------------------------*
+*& Report  ZZ_1630_JOIN
+*&
+*&---------------------------------------------------------------------*
+*&
+*&
+*&---------------------------------------------------------------------*
+REPORT zz_1630_join.
+
+TYPES: BEGIN OF str_join,
+         carrid          Like SPFLI-carrid,
+         connid      like SPFLI-connid,
+         cityfrom    like SPFLI-cityfrom,
+         carrname    like SCARR-carrname,
+END OF str_join.
+
+Data entry type str_join.
+
+select SPFLI~carrid,connid,cityfrom,SCARR~carrname from SPFLI inner join SCARR on SPFLI~carrid = SCARR~carrid into @entry.
+  WRITE: / entry.
+ENDSELECT.

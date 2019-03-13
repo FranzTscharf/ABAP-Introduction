@@ -1,0 +1,27 @@
+*&---------------------------------------------------------------------*
+*& Modulpool         ZZ_1630_FLEDIT
+*&
+*&---------------------------------------------------------------------*
+*&
+*&
+*&---------------------------------------------------------------------*
+
+
+INCLUDE ZZ_1630_FLEDIT_TOP                      .    " global Data
+
+* INCLUDE ZZ_1630_FLEDIT_O01                      .  " PBO-Modules
+* INCLUDE ZZ_1630_FLEDIT_I01                      .  " PAI-Modules
+* INCLUDE ZZ_1630_FLEDIT_F01                      .  " FORM-Routines
+
+
+INCLUDE zz_1630_fledit_value_requesi01.
+
+INCLUDE zz_1630_fledit_status_0100o01.
+
+INCLUDE zz_1630_fledit_user_commandi01.
+
+INCLUDE zz_1630_fledit_status_0200o01.
+
+INCLUDE zz_1630_fledit_user_commandi02.
+
+INCLUDE zz_1630_fledit_user_exit_10i01.

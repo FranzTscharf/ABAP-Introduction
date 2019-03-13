@@ -1,0 +1,3 @@
+FUNCTION-POOL ZZ_1630_FGR.                  "MESSAGE-ID ..
+
+* INCLUDE LZZ_1630_FGRD...                   " Local class definition

@@ -1,0 +1,8 @@
+*&---------------------------------------------------------------------*
+*& Include ZZ_1630_FLEDIT_TOP                                Modulpool        ZZ_1630_FLEDIT
+*&
+*&---------------------------------------------------------------------*
+PROGRAM ZZ_1630_FLEDIT MESSAGE-ID zz_1630_FLEDIT_MESS.
+Tables spfli.
+DATA wa_conn type spfli.
+DATA ok_code like sy-ucomm.
